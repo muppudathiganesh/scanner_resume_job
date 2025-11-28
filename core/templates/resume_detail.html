@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Resume: {{ resume.file.name }}</h3>
+
+<p><strong>Uploaded:</strong> {{ resume.created_at }}</p>
+
+<h5>Skills</h5>
+{% if skills_list %}
+<ul>
+  {% for s in skills_list %}
+    <li>{{ s }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No skills found.</p>
+{% endif %}
+
+
+<h5>Experience</h5>
+<pre>{{ resume.experience }}</pre>
+
+<h5>Education</h5>
+<pre>{{ resume.education }}</pre>
+
+<h5>Parsed JSON</h5>
+<pre>{{ resume.parsed_json|json_script:"parsed" }}</pre>
+
+<a class="btn btn-secondary" href="{% url 'resume_download' resume.pk %}">Download parsed PDF</a>
+{% endblock %}

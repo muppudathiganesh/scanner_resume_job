@@ -1,0 +1,481 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+.hero-section {
+    padding: 60px 20px;
+}
+
+.hero-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #003f8c;
+}
+
+.hero-desc {
+    font-size: 18px;
+    color: #333;
+    margin: 15px 0 25px 0;
+}
+
+.hero-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    border: none;
+}
+
+.companies img {
+    height: 30px;
+    margin: 0 8px;
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 550px;
+}
+.upload-wrapper {
+    background: #f5faff;
+    padding: 40px;
+    border-radius: 20px;
+    margin-top: 30px;
+}
+
+.steps {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.step {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 25px;
+    color: #777;
+}
+
+.step.active {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+.step-number {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e6f0ff;
+    margin-bottom: 6px;
+}
+
+.step.active .step-number {
+    background: #0d6efd;
+    color: white;
+}
+
+.upload-box {
+    border: 2px dashed #b2c6e6;
+    border-radius: 12px;
+    padding: 50px 20px;
+    text-align: center;
+    background: white;
+}
+
+.upload-box:hover {
+    background: #f0f6ff;
+    transition: 0.3s;
+}
+
+.upload-icon {
+    width: 55px;
+    margin-bottom: 10px;
+}
+
+.or-text {
+    text-align: center;
+    margin: 20px 0;
+    color: #555;
+}
+
+.sample-btn {
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: white;
+}
+h6.text-primary {
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #003f8c;
+}
+h2 {
+    font-weight: 700;
+}
+p.text-muted {
+    font-size: 15px;
+    line-height: 1.6;
+}
+</style>
+<!-- <div class="dashboard-banner"style="
+    background-image: url('{% static 'images/download.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+    border-radius: 10px;
+    margin-bottom: 20px;
+">
+    <h1>Welcome, {{ request.user.username }}</h1>
+</div> -->
+
+
+<div class="container hero-section">
+    <div class="row align-items-center">
+
+        <!-- LEFT SIDE -->
+        <div class="col-md-6 mb-4">
+            <h1 class="hero-title">
+                Optimize your resume <br> to get more interviews
+            </h1>
+
+            <p class="hero-desc">
+                Our AI helps you improve your resume for any job, highlighting the key
+                experience and skills recruiters need to see.
+            </p>
+
+            <a href="/upload/" class="btn hero-btn">
+                Scan Your Resume For Free
+            </a>
+
+            <p class="mt-4">Our users have been hired by:</p>
+            <div class="companies">
+                <img src="{% static 'images/Screenshot 2025-11-28 212712.png' %}">
+                <img src="{% static 'images/Screenshot 2025-11-28 212724.png' %}">
+                <img src="{% static 'images/Screenshot 2025-11-28 212734.png' %}">
+                <img src="{% static 'images/Screenshot 2025-11-28 212742.png' %}">
+               
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE IMAGE -->
+        <div class="col-md-6 text-center">
+            <img src="{% static 'images/Screenshot 2025-11-28 113253.png' %}" alt="Resume Preview" class="hero-image shadow rounded">
+        </div>
+
+    </div>
+</div>
+
+
+<div class="container my-5 py-5" style="background-color: #f5faff; border-radius: 20px;">
+    <div class="text-center mb-5">
+        <h6 class="text-primary">OUR TOOLS</h6>
+        <h2 class="mb-3">Get the job you want with our full suite of tools</h2>
+        <p class="text-muted mx-auto" style="max-width: 700px;">
+            We provide everything you need to stand out from the crowd and impress recruiters, from optimizing your CV for ATS to building a perfect LinkedIn profile.
+        </p>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="p-3">
+                <img src="{% static 'images/Screenshot 2025-11-28 205559.png' %}" class="mb-3" alt="ATS Resume Checker Icon" style="width: 60px;">
+                <h4 class="h5">ATS resume checker</h4>
+                <p class="text-muted">Optimize your resume for **applicant tracking systems** to ensure it gets seen by a human recruiter.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="p-3">
+                <img src="{% static 'images/Screenshot 2025-11-28 205606.png' %}" class="mb-3" alt="Resume and Cover Letter Icon" style="width: 60px;">
+                <h4 class="h5">Resume and cover letter optimization</h4>
+                <p class="text-muted">Show recruiters that you're the **perfect candidate** with tailored, job-specific documents.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="p-3">
+                <img src="{% static 'images/Screenshot 2025-11-28 205611.png' %}" class="mb-3" alt="Resume Builder Icon" style="width: 60px;">
+                <h4 class="h5">Resume builder</h4>
+                <p class="text-muted">Build a better, professional resume in **less time for free** using our easy-to-use templates.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="p-3">
+                <img src="{% static 'images/Screenshot 2025-11-28 205616.png' %}" class="mb-3" alt="LinkedIn Optimization Icon" style="width: 60px;">
+                <h4 class="h5">LinkedIn profile optimization</h4>
+                <p class="text-muted">Get **more attention** from the jobs you really want by perfecting your professional online presence.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/upload/" class="btn btn-primary btn-lg">Start Optimizing Your Career</a>
+    </div>
+</div>
+
+
+<!-- NEXT SECTION -->
+<div class="container my-5">
+    <div class="row align-items-center g-5">
+        <div class="col-md-6">
+            <h6 class="text-primary">RESUME OPTIMIZATION</h6>
+            <h2 class="mb-3">Show that you’re the perfect match</h2>
+            <p class="text-muted">
+                Is your resume a good match for what a recruiter is looking for? 
+                If it’s not, you might miss out on interviews for jobs you feel qualified for. 
+                Our AI analyzes your resume and compares it to the job listing using smart technology. 
+                Use your match rate report to see how to optimize your resume to get more interviews.
+            </p>
+            <a href="#" class="btn btn-primary mt-3">Scan your resume</a>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <img src="{% static 'images/Screenshot 2025-11-28 172252.png' %}" class="img-fluid" alt="Resume Match">
+        </div>
+    </div>
+</div>
+<div class="container my-5 py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-md-6">
+            <h6 class="text-primary">APPLICANT TRACKING SYSTEM</h6>
+            <h2 class="mb-3">Beat the bots</h2>
+            <p class="text-muted">
+                Most companies, including 99% of Fortune 500, use **Applicant Tracking Systems (ATS)** to process your resume. 
+                These systems might cause qualified candidates like you to slip through the cracks. 
+                Our technology reverse-engineered the top ATS and studied recruiter workflows to get you in the **"yes" pile**.
+            </p>
+            <ul class="list-unstyled mt-4">
+                <li class="d-flex align-items-start mb-2">
+                    <i class="fas fa-check-circle text-success me-2 mt-1"></i> 
+                    <span>**Keyword Match:** Identify and integrate the exact terms used in the job description.</span>
+                </li>
+                <li class="d-flex align-items-start mb-2">
+                    <i class="fas fa-check-circle text-success me-2 mt-1"></i> 
+                    <span>**Formatting Check:** Ensure your resume structure is easily readable by machines, avoiding parsing errors.</span>
+                </li>
+                <li class="d-flex align-items-start">
+                    <i class="fas fa-check-circle text-success me-2 mt-1"></i> 
+                    <span>**Hard Skills Verification:** Highlight technical and professional skills the ATS is actively searching for.</span>
+                </li>
+            </ul>
+            <a href="/upload/" class="btn btn-primary mt-4">Check My ATS Score</a>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <img src="{% static 'images/Screenshot 2025-11-28 172320.png' %}" class="img-fluid" alt="ATS Resume Scan Preview" style="max-width: 90%;">
+        </div>
+    </div>
+</div>
+<div class="container my-5 py-5">
+    <div class="row align-items-center g-5">
+
+       
+
+        <div class="col-md-6 order-md-1">
+            <h6 class="text-primary">RESUME OPTIMIZATION</h6>
+            <h2 class="mb-3">See your missing skills</h2>
+            <p class="text-muted">
+                Our AI-powered system scans **hard skills, soft skills, and keywords** from the job listing and compares them directly to your resume. 
+                This will show you exactly how to tailor your document so that you highlight the skills and experience recruiters are searching for.
+            </p>
+            <ul class="list-unstyled mt-4">
+                <li class="d-flex align-items-start mb-2">
+                    <i class="fas fa-search text-info me-2 mt-1"></i> 
+                    <span>**Keyword Gap Analysis:** Instantly see skills you need to add to your resume.</span>
+                </li>
+                <li class="d-flex align-items-start mb-2">
+                    <i class="fas fa-lightbulb text-info me-2 mt-1"></i> 
+                    <span>**Phrase Suggestions:** Get AI-generated bullet point ideas to integrate missing skills effectively.</span>
+                </li>
+                <li class="d-flex align-items-start">
+                    <i class="fas fa-cogs text-info me-2 mt-1"></i> 
+                    <span>**Skill Breakdown:** Detailed reports on technical, soft, and cross-functional skill alignment.</span>
+                </li>
+            </ul>
+            <a href="/upload/" class="btn btn-primary mt-4">Find My Skill Gaps</a>
+        </div>
+         <div class="col-md-6 text-center order-md-2">
+            <img src="{% static 'images/Screenshot 2025-11-28 172307.png' %}" class="img-fluid" alt="Missing Skills Analysis Preview" style="max-width: 90%;">
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container my-5 py-5">
+    <div class="text-center mb-5">
+        <h2 style="font-weight: 700;">What Jobscan customers are saying</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-12 position-relative">
+            <div class="d-flex overflow-auto p-2" style="gap: 20px;">
+                
+                <div class="card p-4 flex-shrink-0 shadow-sm" style="min-width: 300px; background-color: #f8f9fa; border: none;">
+                    <div class="stars mb-3 text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <h5 class="card-title" style="font-weight: 700;">Amazing service beat the bot...</h5>
+                    <p class="card-text text-muted small">
+                        From 0 to 10 in minutes I could beat the bloody robotic system for recruiting or at least optimise my chances! Thanks a mi...
+                        <a href="#" class="text-decoration-none">Read more</a>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <span class="small font-weight-bold">Jaume A.</span>
+                        <span class="text-muted small">on Feb 24, 2024</span>
+                    </div>
+                </div>
+
+                <div class="card p-4 flex-shrink-0 shadow-sm" style="min-width: 300px; background-color: #f8f9fa; border: none;">
+                    <div class="stars mb-3 text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <h5 class="card-title" style="font-weight: 700;">Jobscan saves me time</h5>
+                    <p class="card-text text-muted small">
+                        Until ATS can be enhanced with semantic modeling, we are at the mercy of making sure we 'strategy initiatives' on one resu...
+                        <a href="#" class="text-decoration-none">Read more</a>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <span class="small font-weight-bold">Cole O.</span>
+                        <span class="text-muted small">on Feb 6, 2024</span>
+                    </div>
+                </div>
+
+                <div class="card p-4 flex-shrink-0 shadow-sm" style="min-width: 300px; background-color: #f8f9fa; border: none;">
+                    <div class="stars mb-3 text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <h5 class="card-title" style="font-weight: 700;">Good ATS Scanner</h5>
+                    <p class="card-text text-muted small">
+                        UPDATE - I realized I made a mistake when I originally uploaded my resume. I didn't include a job description. I uploaded...
+                        <a href="#" class="text-decoration-none">Read more</a>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <span class="small font-weight-bold">Angelina A.</span>
+                        <span class="text-muted small">on Jan 29, 2024</span>
+                    </div>
+                </div>
+                
+                <div class="card p-4 flex-shrink-0 shadow-sm" style="min-width: 300px; background-color: #f8f9fa; border: none;">
+                    <div class="stars mb-3 text-warning">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <h5 class="card-title" style="font-weight: 700;">This is worth the money!</h5>
+                    <p class="card-text text-muted small">
+                        I had been applying for jobs but my resume was getting automatically rejected. After I started using this program and inco...
+                        <a href="#" class="text-decoration-none">Read more</a>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <span class="small font-weight-bold">Janeen S.</span>
+                        <span class="text-muted small">on Dec 23, 2023</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-5">
+        <p class="text-muted small">Reviews Verified by <img src="{% static 'images/sitejobber-logo.png' %}" alt="Sitejobber Logo" style="height: 20px; vertical-align: middle;"></p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-primary text-white p-5 rounded-3 shadow-lg text-center">
+                <h2 class="mb-3" style="font-weight: 700;">Ready to Land Your Dream Job?</h2>
+                <p class="lead mb-4">
+                    Stop guessing what recruiters want. Start optimizing your resume today and double your interview chances.
+                </p>
+                <a href="/upload/" class="btn btn-light btn-lg text-primary" style="font-weight: 600;">
+                    Scan Your Resume Now - It's Free!
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5 py-5">
+    <div class="text-center mb-5">
+        <h2 style="font-weight: 700;">FAQs</h2>
+    </div>
+
+    <div class="accordion" id="faqAccordion">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    How do I know if my resume is ATS-compliant?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                    The best way is to use an **ATS resume checker** like ours. It analyzes your resume's formatting, section headings, and, most importantly, the keyword match rate against the job description to determine compliance.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    What is a good ATS score for a resume?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                    Generally, you should aim for an **ATS score of 80% or higher**. A score in this range significantly increases the likelihood that your resume will be flagged as a strong candidate and passed on to a human recruiter for review.
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Do ATS scan resumes?
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                    Yes, **ATS (Applicant Tracking Systems)** are software applications used by companies to automatically collect, sort, scan, and rank resumes submitted by job applicants.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Can ATS detect PDF?
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                    Most modern ATS can handle PDFs well, especially plain-text PDFs. However, **highly graphic, image-based, or complex PDF templates** can sometimes lead to parsing errors, causing the ATS to miss key information. It's often safer to stick to simple, clean formats.
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    What is a Resume Checker?
+                </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                    A **Resume Checker** is an online tool that uses algorithms (often AI) to analyze your resume's content, formatting, and keyword usage. Its primary goal is to provide feedback on how to improve your resume's effectiveness, especially concerning ATS and recruiter review.
+                </div>
+            </div>
+        </div>
+
+        </div>
+</div>
+{% endblock %}

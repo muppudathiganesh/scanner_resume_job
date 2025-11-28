@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <h2 class="mb-4">Cover Letter Builder</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Job Role</label>
+        <input type="text" name="job_role" class="form-control mb-3">
+
+        <label>Company Name</label>
+        <input type="text" name="company_name" class="form-control mb-3">
+
+        <label>Cover Letter Content</label>
+        <textarea name="content" rows="10" class="form-control mb-3"></textarea>
+
+        <button class="btn btn-success w-100">Generate Cover Letter</button>
+    </form>
+</div>
+
+{% endblock %}

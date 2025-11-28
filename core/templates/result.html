@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- <style>
+
+.progress-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38px;
+    font-weight: bold;
+    color: #0d6efd;
+    margin: auto;
+    background: conic-gradient(
+        #0d6efd calc(var(--rate) * 1%),
+        #d9e6ff calc(var(--rate) * 1%)
+    );
+    transition: 1s ease-in-out;
+}
+
+.skill-badge {
+    background: #e9f2ff;
+    color: #0d6efd;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 4px;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.match-bar {
+    height: 12px;
+    border-radius: 6px;
+    background: #d9e6ff;
+    overflow: hidden;
+}
+
+.match-bar-fill {
+    height: 100%;
+    background: #0d6efd;
+    width: 0%;
+    transition: 1s ease-in-out;
+}
+
+</style>
+
+<div class="container mt-4 mb-5">
+
+    
+    <div class="card shadow-sm p-4 mb-4 text-center">
+        <div class="progress-circle" style="--rate: {{ match_rate }};">
+            {{ match_rate }}%
+        </div>
+
+        <h3 class="mt-3">Overall Match Rate</h3>
+        <p class="text-muted">Based on your resume vs job requirements</p>
+    </div>
+
+    
+    <div class="card shadow-sm p-4 mb-4">
+        <h4 class="mb-3">Extracted Skills</h4>
+
+        {% if skills %}
+            <div>
+                {% for s in skills %}
+                    <span class="skill-badge">{{ s }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No skills found</p>
+        {% endif %}
+    </div>
+
+    
+    <div class="card shadow-sm p-4 mb-4">
+        <h4 class="mb-3">Job Recommendations</h4>
+
+        <table class="table">
+            <thead class="table-light">
+            <tr>
+                <th>Job Title</th>
+                <th style="width: 35%">Match Score</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for r in jobs %}
+                <tr>
+                    <td>{{ r.title }}</td>
+                    <td>
+                        <div class="match-bar">
+                      <div class="match-bar-fill" data-score="{{ r.score|default:0 }}"></div>
+
+                        </div>
+                        <small class="text-muted">{{ r.score }}%</small>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/upload/" class="btn btn-secondary">Upload Another Resume</a>
+
+</div>
+<script>
+document.querySelectorAll(".match-bar-fill").forEach(el => {
+    el.style.width = el.dataset.score + "%";
+});
+</script> -->
+<!-- Styles -->
+<style>
+.container-report {
+    max-width: 980px;
+    margin: 28px auto;
+}
+.card-compact { padding: 18px; border-radius: 12px; }
+
+.progress-circle {
+    width: 160px; height: 160px; border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:34px; font-weight:700; color:#ebe417; margin:auto;
+   background: conic-gradient(
+    #0d6efd calc(var(--rate) * 1%), 
+    rgb(243, 172, 230) calc(var(--rate) * 1%)
+  );
+    transition: background 0.8s ease;
+}
+.skill-badge { background:#e9f7ff; color:#074ea6; padding:6px 12px; border-radius:18px; margin:6px; display:inline-block; font-size:14px; }
+.mini-title { font-weight:700; margin-bottom:8px; }
+.list-compact { margin:0; padding:0; list-style:none; }
+.weakness { color:#d9534f; }
+.strength { color:#28a745; }
+.match-bar { height: 12px; border-radius: 8px; background:#eef6ff; overflow:hidden; }
+.match-bar-fill { height:100%; background: linear-gradient(90deg,#0d6efd,#6ea8fe); width:0%; transition: width 0.8s ease; }
+
+.row-gap { display:flex; gap:18px; flex-wrap:wrap; }
+.col-left { flex: 0 0 320px; }
+.col-right { flex: 1 1 auto; min-width: 300px; }
+
+.small-muted { color:#6c757d; font-size:13px;}
+.actions { display:flex; gap:10px; margin-top:14px; }
+
+.chart-wrap { width:100%; max-width:420px; margin:auto; }
+</style>
+
+<div class="container-report">
+
+  <!-- TOP: match circle + summary -->
+  <div class="card card-compact mb-3 shadow-sm">
+    <div style="display:flex; gap:18px; align-items:center; flex-wrap:wrap;">
+      <div style="flex:0 0 180px;">
+        <div class="progress-circle" style="--rate: {{ match_rate|default:0 }};">
+          {{ match_rate|default:0 }}%
+        </div>
+        <div class="text-center small-muted mt-2">Overall Match Rate</div>
+      </div>
+
+      <div style="flex:1 1 auto;">
+        <h4>AI Resume Summary</h4>
+        <p class="small-muted">
+          {{ ai_summary|default:"No summary available." }}
+        </p>
+
+        <div class="actions">
+          <a href="{% url 'upload' %}" class="btn btn-outline-secondary">Upload New</a>
+          <a href="{% url 'export_pdf' resume_id=resume_id %}" class="btn btn-primary">Export to PDF</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY: left column skills/strengths/weaknesses, right column jobs & ATS -->
+  <div style="display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;">
+    <div class="col-left">
+      <!-- Extracted Skills -->
+      <div class="card card-compact mb-3 shadow-sm">
+        <div class="mini-title">Extracted Skills</div>
+        {% if skills %}
+            <div>
+                {% for s in skills %}
+                    <span class="skill-badge">{{ s }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="small-muted">No skills detected.</p>
+        {% endif %}
+      </div>
+
+      <!-- Strengths & Weaknesses -->
+      <div class="card card-compact mb-3 shadow-sm">
+        <div class="mini-title">Strengths</div>
+        {% if strengths %}
+            <ul class="list-compact">
+            {% for st in strengths %}
+                <li class="small-muted strength">• {{ st }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="small-muted">No strengths identified.</p>
+        {% endif %}
+
+        <hr>
+
+        <div class="mini-title">Weaknesses</div>
+        {% if weaknesses %}
+            <ul class="list-compact">
+            {% for w in weaknesses %}
+                <li class="small-muted weakness">• {{ w }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="small-muted">No weaknesses identified.</p>
+        {% endif %}
+      </div>
+
+      <!-- Missing Skills -->
+      <div class="card card-compact mb-3 shadow-sm">
+        <div class="mini-title">Missing Skills (suggested)</div>
+        {% if missing_skills %}
+            <div>
+            {% for ms in missing_skills %}
+                <span class="skill-badge" style="background:#fff4e6; color:#8a5a00;">{{ ms }}</span>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p class="small-muted">No suggestions — your resume matches common skills.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-right">
+      <!-- ATS score breakdown -->
+      <div class="card card-compact mb-3 shadow-sm">
+        <div class="mini-title">ATS Score Breakdown</div>
+
+        {% if ats_breakdown %}
+            {% for k,v in ats_breakdown.items %}
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div style="font-weight:600;">{{ k }}</div>
+                    <div class="small-muted">{{ v }}%</div>
+                </div>
+                <div class="match-bar mb-3">
+                    <div class="match-bar-fill" data-score="{{ v }}"></div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="small-muted">No ATS breakdown available.</p>
+        {% endif %}
+      </div>
+
+      <!-- Job recommendations with animated bars -->
+      <div class="card card-compact mb-3 shadow-sm">
+        <div class="mini-title">Job Recommendations</div>
+        <table class="table table-borderless mb-0">
+          <thead><tr><th>Job</th><th style="width:45%">Match</th></tr></thead>
+          <tbody>
+            {% for r in jobs %}
+            <tr>
+                <td style="vertical-align:middle;">{{ r.title }}</td>
+                <td>
+                    <div class="match-bar mb-1">
+                        <div class="match-bar-fill" data-score="{{ r.score|default:0|floatformat:0 }}"></div>
+                    </div>
+                    <div class="small-muted">{{ r.score|default:0|floatformat:0 }}%</div>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Animated donut chart (Chart.js) -->
+      <div class="card card-compact shadow-sm p-3">
+        <div class="mini-title">Skills coverage chart</div>
+        <div class="chart-wrap">
+          <canvas id="skillsChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts: Chart.js + small animations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // animate bars (match-bar-fill)
+    document.querySelectorAll('.match-bar-fill').forEach(function(el) {
+        const score = Number(el.dataset.score || 0);
+        // small timeout to allow CSS to apply
+        setTimeout(()=> el.style.width = score + '%', 80);
+    });
+
+    // Chart: skillsChart
+  const skills = JSON.parse('{{ skills|default:"[]"|escapejs }}');
+const chartLabels = JSON.parse('{{ chart_labels|default:"[]"|escapejs }}');
+const chartValues = JSON.parse('{{ chart_values|default:"[]"|escapejs }}');
+
+    const ctx = document.getElementById('skillsChart').getContext('2d');
+    if (ctx && chartLabels.length) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    data: chartValues,
+                    backgroundColor: ['#0d6efd','#6ea8fe','#cfe8ff','#e9f3ff'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                plugins: { legend: { position: 'bottom' } },
+                maintainAspectRatio: true,
+                cutout: '70%'
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

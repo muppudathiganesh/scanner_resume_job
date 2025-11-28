@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Styles -->
+<style>
+.feature-list {
+    list-style: none;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #003f8c;
+}
+.feature-list li {
+    background: #eef6ff;
+    padding: 8px 15px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+}
+
+.optimization-img {
+    max-width: 90%;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transition: transform .4s;
+}
+
+.optimization-img:hover {
+    transform: scale(1.03);
+}
+</style>
+<!-- RESUME & COVER LETTER OPTIMIZATION SECTION -->
+<div class="container my-5 py-5">
+    <div class="row align-items-center g-5">
+
+        <!-- Left Content -->
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-3" style="color:#003f8c;">Resume & Cover Letter Optimization</h2>
+            <p class="text-muted mb-4">
+                Improve your chances of getting interviews with AI-powered optimization.  
+                Our tool analyzes your resume and cover letter line-by-line and highlights:
+            </p>
+
+            <ul class="feature-list">
+                <li>✓ Weak and strong points</li>
+                <li>✓ Missing job-specific keywords</li>
+                <li>✓ ATS readability improvements</li>
+                <li>✓ Tailored suggestions for job descriptions</li>
+                <li>✓ Grammar & clarity improvements</li>
+            </ul>
+
+           <a href="{% url 'optimize_review' %}" class="btn btn-primary mt-3 px-4 py-2 rounded-pill">
+
+                Optimize Now →
+            </a>
+        </div>
+
+        <!-- Right Image -->
+        <div class="col-lg-6 text-center">
+            <img src="{% static 'images/Screenshot 2025-11-28 233847.png' %}" 
+                 alt="Resume Optimization" 
+                 class="img-fluid optimization-img">
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

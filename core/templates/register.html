@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    body {
+        /* background: linear-gradient(to right, pink, skyblue); */
+        min-height: 100vh;
+    }
+
+    .register-card {
+       background: linear-gradient(to right, rgb(144, 139, 245), skyblue);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .register-card label {
+        font-weight: 600;
+    }
+
+    .register-card input,
+    .register-card select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .register-title {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+</style>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="register-card">
+
+        <div class="register-title">Register</div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="mb-3">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <button class="btn btn-success w-100">Register</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="/login/">Already have an account?</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

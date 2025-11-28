@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+.review-box {
+    background: #f7faff;
+    padding: 40px;
+    border-radius: 20px;
+    margin-top: 40px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.tip-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border-left: 5px solid #0d6efd;
+}
+
+.motivation-box {
+    background: #e9f3ff;
+    padding: 25px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-style: italic;
+    margin-top: 25px;
+    color: #003f8c;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+</style>
+
+<div class="container review-box">
+
+    <h2 class="fw-bold mb-3" style="color:#003f8c;">Resume Analysis Report</h2>
+
+    <p class="text-muted">Here is your uploaded resume:</p>
+
+    <div class="p-3 bg-white rounded shadow-sm mb-4">
+        <strong>Uploaded File:</strong>  
+        {% if resume %}
+            <span class="text-primary">{{ resume.file.name }}</span>
+        {% else %}
+            <span class="text-danger">No resume found!</span>
+        {% endif %}
+    </div>
+
+    <h4 class="mt-4 mb-3" style="color:#003f8c;">Improvement Tips</h4>
+
+    {% for t in tips %}
+    <div class="tip-card">
+        ✓ {{ t }}
+    </div>
+    {% endfor %}
+
+    <div class="motivation-box">
+        {{ motivation }}
+    </div>
+
+    <a href="/" class="btn btn-primary mt-4 px-4 py-2 rounded-pill">
+        Re-Upload Resume →
+    </a>
+
+</div>
+
+{% endblock %}

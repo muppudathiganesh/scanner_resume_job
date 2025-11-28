@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <h2 class="mb-3">Cover Letter</h2>
+
+    <p><strong>Job Role:</strong> {{ letter.job_role }}</p>
+    <p><strong>Company:</strong> {{ letter.company_name }}</p>
+
+    <hr>
+
+    <p style="white-space: pre-line;">{{ letter.content }}</p>
+    
+
+</div>
+
+{% endblock %}

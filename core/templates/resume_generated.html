@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- <div class="container my-5">
+    <h2>Generated Resume</h2>
+    <pre class="p-3 border rounded bg-light">{{ resume_text }}</pre>
+    
+    <a href="#" class="btn btn-primary mt-3">Use This Template</a>
+    <a href="{% url 'download_resume' resume.id %}" class="btn btn-success mt-3">Download as PDF</a>
+</div> -->
+<h2>Resume Generated</h2>
+
+<pre>{{ resume.summary }}</pre>  {# show AI-generated text #}
+
+{% if resume.id %}
+    <a href="{% url 'download_resume' resume.id %}">Download PDF</a>
+{% else %}
+    <p>Resume not generated yet.</p>
+{% endif %}
+
+{% endblock %}
