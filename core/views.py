@@ -294,9 +294,11 @@ def upload_resume(request):
 
             # match rate = simple avg of ATS categories or skills coverage
             match_rate = int(sum(ats.values()) / max(1, len(ats)))
+            
 
             # chart data
             chart_labels, chart_values = build_chart_from_ats(ats)
+            
 
             return render(request, "result.html", {
                 "resume_id": resume.id,
