@@ -1,35 +1,54 @@
 # core/job_recommender.py
-from sentence_transformers import SentenceTransformer, util
+# --------------------------------------------------------
+# Render-SAFE Job Recommendation (No PyTorch / Transformers)
+# --------------------------------------------------------
+
 import numpy as np
 
-# load model once
-MODEL = None
-def get_model(name="all-MiniLM-L6-v2"):
-    global MODEL
-    if MODEL is None:
-        MODEL = SentenceTransformer(name)
-    return MODEL
-
-# job database (example). In production store in DB.
+# Tiny job database (same as before)
 JOBS = [
-    {"id":1, "title":"Python Backend Developer", "desc":"python django flask backend aws docker sql"},
-    {"id":2, "title":"Frontend React Developer", "desc":"javascript react html css redux"},
-    {"id":3, "title":"Data Scientist (NLP)", "desc":"python pandas numpy sklearn transformers nlp"},
-    {"id":4, "title":"DevOps Engineer", "desc":"docker kubernetes aws terraform ci/cd monitoring"}
+    {"id": 1, "title": "Python Backend Developer", 
+     "desc": "python django flask backend aws docker sql"},
+
+    {"id": 2, "title": "Frontend React Developer", 
+     "desc": "javascript react html css redux"},
+
+    {"id": 3, "title": "Data Scientist (NLP)", 
+     "desc": "python pandas numpy sklearn transformers nlp"},
+
+    {"id": 4, "title": "DevOps Engineer", 
+     "desc": "docker kubernetes aws terraform ci/cd monitoring"},
 ]
 
-def bert_recommend_jobs(skills_list, top_k=5):
-    model = get_model()
-    if not skills_list:
-        user_emb = model.encode([""], convert_to_tensor=True)
-    else:
-        user_text = " ".join(skills_list)
-        user_emb = model.encode([user_text], convert_to_tensor=True)
 
+# Very lightweight similarity scoring (Jaccard index)
+def simple_similarity(user_skills, job_desc):
+    user = set(s.lower() for s in user_skills)
+    job = set(job_desc.lower().split())
+
+    if not user:
+        return 0.0
+
+    # Jaccard similarity
+    intersection = len(user & job)
+    union = len(user | job)
+    return intersection / union if union > 0 else 0
+
+
+# MAIN FUNCTION — same signature as before
+def bert_recommend_jobs(skills_list, top_k=5):
     results = []
-    for j in JOBS:
-        job_emb = model.encode([j["desc"]], convert_to_tensor=True)
-        score = float(util.cos_sim(user_emb, job_emb)[0][0])
-        results.append({"id": j["id"], "title": j["title"], "score": round(score*100,2)})
+
+    for job in JOBS:
+        score = simple_similarity(skills_list, job["desc"])
+        results.append({
+            "id": job["id"],
+            "title": job["title"],
+            "desc": job["desc"],
+            "score": round(score * 100, 2)
+        })
+
+    # sort high → low
     results = sorted(results, key=lambda x: x["score"], reverse=True)
+
     return results[:top_k]
