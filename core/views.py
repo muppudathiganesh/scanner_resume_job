@@ -267,37 +267,36 @@ def upload_resume(request):
             resume.user = request.user
             resume.save()
 
-            # analyze
-            extracted_text, skills = analyze_resume(resume.file)  # skills = list
+          
+            extracted_text, skills = analyze_resume(resume.file) 
             resume.extracted_text = extracted_text
             resume.skills = ",".join(skills)
             resume.save()
 
-            # job recommendations
+        
             jobs = bert_recommend_jobs(skills)
-            # ensure jobs have 'score' numeric and optional 'desc'
+         
             for j in jobs:
                 j.setdefault("score", 0)
                 j.setdefault("desc", "")
 
-            # AI summary
+        
             ai_summary = summarize_text(extracted_text)
 
-            # strengths/weaknesses
+         
             strengths, weaknesses = detect_strengths_weaknesses(skills)
 
-            # missing skills suggestion
+        
             missing = suggest_missing_skills(skills, jobs)
-
-            # ATS breakdown
+ 
             ats = compute_ats_breakdown(extracted_text, skills)
 
-            # match rate = simple avg of ATS categories or skills coverage
             match_rate = int(sum(ats.values()) / max(1, len(ats)))
             
 
-            # chart data
+           
             chart_labels, chart_values = build_chart_from_ats(ats)
+            
             
 
             return render(request, "result.html", {
@@ -312,6 +311,7 @@ def upload_resume(request):
                 "match_rate": match_rate,
                 "chart_labels": chart_labels,
                 "chart_values": chart_values,
+                 
             })
     else:
         form = UploadForm()
@@ -508,4 +508,71 @@ def download_resume_pdf(request, id):
 
     doc.build(elements)
     return response
+# admin----------------------------------
 
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render
+from .models import Resume
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def admin_dashboard(request):
+
+    search_query = request.GET.get("search", "").strip()
+    skill_filter = request.GET.get("skill", "").strip().lower()
+    sort_by = request.GET.get("sort", "")
+
+    resumes = Resume.objects.all().order_by("-created_at")
+
+    # 🔍 SEARCH
+    if search_query:
+        resumes = resumes.filter(
+            Q(user__username__icontains=search_query) |
+            Q(skills__icontains=search_query) |
+            Q(education__icontains=search_query) |
+            Q(experience__icontains=search_query) |
+            Q(file__icontains=search_query)
+        )
+
+    # 🎯 FILTER BY SKILL
+    if skill_filter:
+     resumes = resumes.filter(skills__iregex=rf"\b{skill_filter}\b")
+
+    # ----------------------------------------
+    # ⭐ Compute match_rate manually
+    # ----------------------------------------
+    def compute_match_rate(resume):
+        if not skill_filter:
+            return 0
+
+        skills_list = (resume.skills or "").lower().split(",")
+        return 100 if skill_filter in skills_list else 0
+
+    # Attach match_rate value to each resume object
+    for r in resumes:
+        r.match_rate = compute_match_rate(r)
+
+    # ----------------------------------------
+    # ⭐ SORTING (Python sorting)
+    # ----------------------------------------
+    if sort_by == "match_high":
+        resumes = sorted(resumes, key=lambda x: x.match_rate, reverse=True)
+    elif sort_by == "match_low":
+        resumes = sorted(resumes, key=lambda x: x.match_rate)
+
+    # ----------------------------------------
+    # 🔢 PAGINATION
+    # ----------------------------------------
+    paginator = Paginator(resumes, 10)  
+    page_number = request.GET.get("page")
+    resumes_page = paginator.get_page(page_number)
+
+    return render(request, "admin_dashboard.html", {
+        "resumes": resumes_page,
+        "search_query": search_query,
+        "skill_filter": skill_filter,
+        "sort_by": sort_by,
+    })

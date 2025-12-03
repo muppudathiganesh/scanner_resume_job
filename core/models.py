@@ -11,6 +11,13 @@ class Resume(models.Model):
     parsed_json = models.JSONField(null=True, blank=True)  # structured parse output
     created_at = models.DateTimeField(auto_now_add=True)
 
+      # 👉 ADD THIS METHOD HERE
+    def highlighted_preview(self):
+        if not self.extracted_text:
+            return ""
+        words = self.extracted_text.split()[:20]
+        return " ".join(words) + "..."
+
     def __str__(self):
         return f"{self.user.username} - {self.file.name}"
 

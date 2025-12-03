@@ -1,65 +1,112 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-<div class="container py-5">
-    <h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="container py-4">
+    <h2 class="mb-3">Admin Dashboard</h2>
     <p>Welcome, {{ request.user.username }} (Admin)</p>
+
     <a href="{% url 'logout' %}" class="btn btn-danger mb-3">Logout</a>
+
+    <!-- 🔍 Search + Filter Row -->
+    <form method="get" class="row mb-4 g-2">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control"
+                   placeholder="Search user, skills, file..."
+                   value="{{ search_query }}">
+        </div>
+
+        <div class="col-md-3">
+            <input type="text" name="skill" class="form-control"
+                   placeholder="Filter by skill"
+                   value="{{ skill_filter }}">
+        </div>
+
+        <div class="col-md-3">
+            <select name="sort" class="form-select">
+                <option value="">Sort by</option>
+                <option value="match_high" {% if sort_by == 'match_high' %}selected{% endif %}>Match ↓ High</option>
+                <option value="match_low" {% if sort_by == 'match_low' %}selected{% endif %}>Match ↑ Low</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">Apply</button>
+        </div>
+    </form>
 
     {% if resumes %}
     <div class="table-responsive">
-        <table class="table table-striped table-bordered">
+        <table class="table table-bordered table-striped align-middle">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
                     <th>User</th>
-                    <th>Resume File</th>
+                    <th>Resume</th>
                     <th>Skills</th>
-                    <th>Experience</th>
-                    <th>Education</th>
-                    <th>Uploaded At</th>
+                    <th>Uploaded</th>
+                    <th>Match</th>
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for resume in resumes %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ resume.user.username }}</td>
-                    <td>{{ resume.file.name|slice:":30" }}{% if resume.file.name|length > 30 %}...{% endif %}</td>
+
+                    <td>{{ resume.file.name|slice:":40" }}{% if resume.file.name|length > 40 %}...{% endif %}</td>
+
                     <td>
                         {% if resume.skills %}
                             {{ resume.skills|truncatechars:50 }}
                         {% else %}
-                            N/A
+                            <span class="text-muted">N/A</span>
                         {% endif %}
                     </td>
-                    <td>
-                        {% if resume.experience %}
-                            {{ resume.experience|truncatechars:50 }}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if resume.education %}
-                            {{ resume.education|truncatechars:50 }}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
+
                     <td>{{ resume.created_at|date:"Y-m-d H:i" }}</td>
+
                     <td>
-                        <a href="{% url 'resume_download' resume.pk %}" class="btn btn-sm btn-primary">Download PDF</a>
+                        {% if resume.match_rate %}
+                            <strong>{{ resume.match_rate }}%</strong>
+                        {% else %}
+                            <span class="text-muted">--</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
                         <a href="{% url 'resume_detail' resume.pk %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'resume_download' resume.pk %}" class="btn btn-sm btn-primary">PDF</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
+
         </table>
     </div>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            {% if resumes.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ resumes.previous_page_number }}">Prev</a></li>
+            {% endif %}
+
+            <li class="page-item active"><span class="page-link">{{ resumes.number }}</span></li>
+
+            {% if resumes.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ resumes.next_page_number }}">Next</a></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
     {% else %}
-        <p>No resumes uploaded yet.</p>
+        <p>No resumes found.</p>
     {% endif %}
 </div>
+
 {% endblock %}
